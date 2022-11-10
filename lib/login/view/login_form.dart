@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../widgets/customTextInput.dart';
 import '../login.dart';
@@ -16,6 +17,7 @@ class _LoginFormState extends State<LoginForm> {
   bool _rememberMe = false;
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context)!;
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
@@ -63,7 +65,7 @@ class _LoginFormState extends State<LoginForm> {
                           }
                         }),
                     Text(
-                      "Remember me",
+                      locale.rememberMe,
                       style: TextStyle(color: Colors.grey.shade500),
                     )
                   ]),
@@ -73,7 +75,7 @@ class _LoginFormState extends State<LoginForm> {
                   TextButton(
                       onPressed: null,
                       child: Text(
-                        "Forgot password?",
+                        locale.forgotPassword,
                         style: TextStyle(color: Colors.red.shade300),
                       ))
                 ],
@@ -90,6 +92,7 @@ class _LoginFormState extends State<LoginForm> {
 class _UsernameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context)!;
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
@@ -104,7 +107,7 @@ class _UsernameInput extends StatelessWidget {
                 context.read<LoginBloc>().add(LoginUsernameChanged(username)),
             decoration: InputDecoration(
               border: InputBorder.none,
-              labelText: 'username',
+              labelText: locale.username,
               errorText: state.username.invalid ? 'invalid username' : null,
             ),
           ),
@@ -117,6 +120,7 @@ class _UsernameInput extends StatelessWidget {
 class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context)!;
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
@@ -132,7 +136,7 @@ class _PasswordInput extends StatelessWidget {
             obscureText: true,
             decoration: InputDecoration(
               border: InputBorder.none,
-              labelText: 'password',
+              labelText: locale.password,
               errorText: state.password.invalid ? 'invalid password' : null,
             ),
           ),
@@ -145,6 +149,7 @@ class _PasswordInput extends StatelessWidget {
 class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context)!;
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
@@ -160,7 +165,7 @@ class _LoginButton extends StatelessWidget {
                         context.read<LoginBloc>().add(const LoginSubmitted());
                       }
                     : null,
-                child: const Text('Login'),
+                child: Text(locale.login),
               );
       },
     );

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:so/authentication/authentication.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context)!;
     return Align(
       alignment: const Alignment(0, -0.25),
       child: Container(
@@ -36,7 +38,7 @@ class AccountPage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  Text("Fullname: ${state.user.fullname}")
+                  Text("${locale.fullName}: ${state.user.fullname}")
                 ],
               );
             }),
@@ -49,7 +51,7 @@ class AccountPage extends StatelessWidget {
                     .read<AuthenticationBloc>()
                     .add(AuthenticationLogoutRequested());
               },
-              child: const Text("Log out"),
+              child: Text(locale.logout),
             ),
           ],
         ),

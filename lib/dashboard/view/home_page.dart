@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:so/dashboard/view/TrianglePainter.dart';
 import 'package:so/dashboard/view/calendar.dart';
 import 'package:so/dashboard/view/periods.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../authentication/authentication.dart';
@@ -20,10 +20,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
+    var locale = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       child: Column(
         children: [
-          buildDashboardHeader(),
+          buildDashboardHeader(context),
           BlocBuilder<DashboardBloc, DashboardState>(builder: (context, state) {
             if (state.status == DashboardStatus.success) {
               var schoolYearStartDate = DateTime.fromMillisecondsSinceEpoch(
@@ -36,13 +37,13 @@ class HomePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Periods",
+                          locale.periods,
                           style: textTheme.bodyLarge,
                         ),
                         TextButton(
                             onPressed: () {},
                             child: Text(
-                              "See all",
+                              locale.seeAll,
                               style: textTheme.titleSmall,
                             ))
                       ],
@@ -81,9 +82,9 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10, bottom: 10),
-                        child: Text("General modules"),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, bottom: 10),
+                        child: Text(locale.generalModules),
                       ),
                       ModulesCard(modules: state.dashboard!.general_modules),
                     ],
@@ -103,7 +104,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget buildDashboardHeader() {
+  Widget buildDashboardHeader(BuildContext context) {
+    var locale = AppLocalizations.of(context)!;
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         return ListTile(
@@ -111,9 +113,9 @@ class HomePage extends StatelessWidget {
                 CircleAvatar(backgroundImage: NetworkImage(state.user.avatar)),
             title: Row(
               children: [
-                const Text(
-                  "Hi",
-                  style: TextStyle(
+                Text(
+                  locale.hello,
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w300),
@@ -131,39 +133,6 @@ class HomePage extends StatelessWidget {
               ],
             ));
       },
-    );
-  }
-
-  Widget buildCalendar(int school_year_start_date) {
-    var date =
-        DateTime.fromMillisecondsSinceEpoch(school_year_start_date * 1000);
-    var _focusedDay = date;
-    var _selectedDay = date;
-    return TableCalendar(
-      rowHeight: 20,
-      firstDay: date.subtract(const Duration(days: 7)),
-      lastDay: date.add(const Duration(days: 365)),
-      focusedDay: _focusedDay,
-      calendarFormat: CalendarFormat.week,
-      daysOfWeekHeight: 18,
-      selectedDayPredicate: (day) {
-        return isSameDay(_selectedDay, day);
-      },
-      onDaySelected: (selectedDay, focusedDay) {},
-      calendarStyle: const CalendarStyle(),
-      calendarBuilders: CalendarBuilders(
-        headerTitleBuilder: (context, day) {
-          return Center(
-              child: Text(
-                  "${DateFormat.yMd().format(day)} - ${DateFormat.yMd().format(day.add(const Duration(days: 7)))}"));
-        },
-        prioritizedBuilder: (context, day, focusedDay) {
-          return const SizedBox();
-        },
-        dowBuilder: (context, day) {
-          return Center(child: Text(DateFormat.E().format(day)));
-        },
-      ),
     );
   }
 }

@@ -1,6 +1,9 @@
 import 'package:dashboard_repository/dashboard_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../language/bloc/language_bloc.dart';
+import '../../language/bloc/language_state.dart';
 
 class ModulesCard extends StatelessWidget {
   const ModulesCard({super.key, required this.modules});
@@ -21,19 +24,30 @@ class ModulesCard extends StatelessWidget {
         crossAxisCount: 3,
         children: [
           ...modules.map((e) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Icon(Icons.apps),
-                Text(
-                  e.fullname_en,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                  ),
-                )
-              ],
+            return BlocBuilder<LanguageBloc, LanguageState>(
+              builder: (context, state) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.apps),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    FittedBox(
+                      child: Text(
+                        state.locale == const Locale('vi')
+                            ? e.fullname_vi
+                            : e.fullname_en,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
             );
           }).toList()
         ],

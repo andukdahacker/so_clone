@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../language/language.dart';
 
 class CustomSwitch extends StatefulWidget {
   final Color? enableColor;
@@ -7,28 +11,38 @@ class CustomSwitch extends StatefulWidget {
   final double height;
   final double switchHeight;
   final double switchWidth;
+  final String? leftText;
+  final String? rightText;
+  final bool value;
+  final ValueChanged<bool> onChanged;
 
-  const CustomSwitch({
-    super.key,
-    this.enableColor,
-    this.disableColor,
-    this.width = 60,
-    this.height = 35,
-    this.switchHeight = 25,
-    this.switchWidth = 25,
-  });
+  const CustomSwitch(
+      {super.key,
+      this.enableColor,
+      this.disableColor,
+      this.width = 60,
+      this.height = 35,
+      this.switchHeight = 25,
+      this.switchWidth = 25,
+      this.leftText,
+      this.rightText,
+      required this.value,
+      required this.onChanged});
 
   @override
   _CustomSwitchState createState() => _CustomSwitchState();
 }
 
 class _CustomSwitchState extends State<CustomSwitch> {
-  bool value = false;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Widget buildSwitch() {
     return Container(
       margin: const EdgeInsets.all(4),
-      alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: widget.value ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         width: widget.switchWidth,
         height: widget.switchHeight,
@@ -44,9 +58,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          value = !value;
-        });
+        widget.onChanged(!widget.value);
       },
       //switch container
       child: Container(
@@ -55,18 +67,22 @@ class _CustomSwitchState extends State<CustomSwitch> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24.0),
             border: Border.all(color: Colors.white),
-            color: value == false ? widget.disableColor : widget.enableColor,
+            color: widget.value == false
+                ? widget.disableColor
+                : widget.enableColor,
           ),
           //switch
           child: Stack(children: [
-            Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 5),
-                child: const Text("VI")),
-            Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 5),
-                child: const Text("EN")),
+            if (widget.leftText != null && widget.value)
+              Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(widget.leftText!)),
+            if (widget.rightText != null && !widget.value)
+              Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Text(widget.rightText!)),
             buildSwitch()
           ])),
     );

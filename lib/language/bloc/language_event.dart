@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 class LanguageEvent extends Equatable {
   const LanguageEvent();
@@ -7,12 +8,17 @@ class LanguageEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-enum Language { VI, EN }
-
-class LanguageChanged extends LanguageEvent {
-  const LanguageChanged({required this.language});
-  final Language language;
+class LanguageFirstLoaded extends LanguageEvent {
+  const LanguageFirstLoaded();
 
   @override
-  List<Object?> get props => [language];
+  List<Object?> get props => [];
+}
+
+class LanguageChanged extends LanguageEvent {
+  const LanguageChanged({required this.locale});
+  final Locale locale;
+
+  @override
+  List<Object?> get props => [locale];
 }

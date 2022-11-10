@@ -1,0 +1,26 @@
+{
+    "helloWorld": "Hello World!",
+    "@helloWorld": {
+      "description": "The conventional newborn programmer greeting"
+    },
+    "support": "Support",
+    "username": "Username",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "login": "Log in",
+    "version": "Version 2.3.0 - Teacher",
+    "hello": "Hello",
+    "periods": "Periods",
+    "seeAll": "See all",
+    "generalModules": "General modules",
+    "home": "Home",
+    "chat": "Chat",
+    "notifications": "Notifications",
+    "account": "Account",
+    "logout": "Log out",
+    "period": "Period",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "fullName": "Fullname"
+}

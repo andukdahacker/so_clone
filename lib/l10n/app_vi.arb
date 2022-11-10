@@ -1,0 +1,23 @@
+{
+    "helloWorld": "Xin chào thế giới",
+    "support": "Hỗ trợ",
+    "username": "Tên đăng nhập",
+    "password": "Mật khẩu",
+    "rememberMe": "Nhớ đăng nhập",
+    "forgotPassword": "Quên mật khẩu?",
+    "login": "Đăng nhập",
+    "version": "Phiên bản 2.3.0 - Giáo viên",
+    "hello": "Xin chào",
+    "periods": "Lịch dạy trong ngày",
+    "seeAll": "Xem tất cả",
+    "generalModules": "Chức năng chung",
+    "home": "Trang chủ",
+    "chat": "Tin nhắn",
+    "notifications": "Thông báo",
+    "account": "Tài khoản",
+    "logout": "Đăng xuất",
+    "period": "Tiết học",
+    "startTime": "Thời gian bắt đầu",
+    "endTime": "Thời gian kết thúc",
+    "fullName": "Họ tên"
+}

@@ -6,6 +6,7 @@ import 'package:so/dashboard/view/account_page.dart';
 import 'package:so/dashboard/view/home_page.dart';
 import 'package:so/widgets/customeAppBar.dart';
 import '../bloc/dashboard_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -49,6 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -82,28 +84,28 @@ class _DashboardPageState extends State<DashboardPage> {
                   Icons.home_outlined,
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
-                label: "Home"),
+                label: locale.home),
             BottomNavigationBarItem(
                 activeIcon: const Icon(Icons.chat_bubble),
                 icon: Icon(
                   Icons.chat_bubble_outline,
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
-                label: "Chat"),
+                label: locale.chat),
             BottomNavigationBarItem(
                 activeIcon: const Icon(Icons.notifications),
                 icon: Icon(
                   Icons.notifications_outlined,
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
-                label: "Notifications"),
+                label: locale.notifications),
             BottomNavigationBarItem(
                 activeIcon: const Icon(Icons.account_circle),
                 icon: Icon(
                   Icons.account_circle_outlined,
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
-                label: "Account")
+                label: locale.account)
           ]),
     );
   }

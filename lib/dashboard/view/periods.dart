@@ -1,5 +1,6 @@
 import 'package:dashboard_repository/dashboard_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PeriodCard extends StatefulWidget {
   const PeriodCard({super.key, required this.period});
@@ -12,6 +13,7 @@ class PeriodCard extends StatefulWidget {
 class _PeriodCardState extends State<PeriodCard> {
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context)!;
     return Container(
       width: 250,
       margin: const EdgeInsets.only(right: 8, top: 10),
@@ -24,9 +26,9 @@ class _PeriodCardState extends State<PeriodCard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("ID: ${widget.period.period_id}"),
-          Text("Period: ${widget.period.period_en}"),
-          Text("Start time: ${widget.period.start_time}"),
-          Text("End time: ${widget.period.end_time}")
+          Text("${locale.period}: ${widget.period.period_en}"),
+          Text("${locale.startTime}: ${widget.period.start_time}"),
+          Text("${locale.endTime}: ${widget.period.end_time}")
         ],
       ),
     );
