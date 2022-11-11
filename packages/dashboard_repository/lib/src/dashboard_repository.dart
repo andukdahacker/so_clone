@@ -4,13 +4,12 @@ import 'package:dio/dio.dart';
 class DashboardRepository {
   Dashboard? _dashboard;
 
-  Future<Dashboard?> getDashboard() async {
+  Future<Dashboard?> getDashboard(String token) async {
     if (_dashboard != null) return _dashboard;
 
     try {
       final dio = Dio(BaseOptions());
-      dio.options.headers["Authorization"] =
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC92ZXI1LmFwaS5zby5lZHUudm5cL2FwaVwvdjVcL21hbmFnZXJcL2xvZ2luIiwiaWF0IjoxNjY3ODcyODcxLCJleHAiOjE2NjgxMzIwNzEsIm5iZiI6MTY2Nzg3Mjg3MSwianRpIjoiNDM1RUVPc2RiRW94WUVlaiIsInN1YiI6MjU2OCwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.K42DYqmH_pq7Wgm7DtN1FunqXxG9FGeMyqx9TJkzR5w";
+      dio.options.headers["Authorization"] = "Bearer $token";
       var response = await dio.post(
         "https://ver5.api.so.edu.vn/api/v5/manager/dashboard",
         data: {"app_id": 7, "user_id": 2568, "date": 1622514674},

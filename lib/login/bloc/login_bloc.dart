@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
 import 'login_event.dart';
@@ -51,6 +52,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       try {
+        final prefs = await SharedPreferences.getInstance();
         LogInResponse? logInResponse = await _authenticationRepository.logIn(
           username: state.username.value,
           password: state.password.value,
@@ -63,6 +65,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               status: FormzStatus.submissionFailure,
               message: logInResponse.message));
         } else {
+          prefs.setString('token', logInResponse.data['token']);
           emit(state.copyWith(status: FormzStatus.submissionSuccess));
         }
       } catch (err) {
