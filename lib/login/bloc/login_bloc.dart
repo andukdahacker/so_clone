@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -15,6 +17,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginUsernameChanged>(_onUsernameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onSubmitted);
+    on<TryAutoLogin>(_onTryAutoLogin);
   }
 
   final AuthenticationRepository _authenticationRepository;
@@ -65,11 +68,39 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               status: FormzStatus.submissionFailure,
               message: logInResponse.message));
         } else {
-          prefs.setString('token', logInResponse.data['token']);
+          if (event.rememberMe) {
+            await prefs.setString('username', state.username.value);
+            await prefs.setString('password', state.password.value);
+          }
+          await prefs.setString('token', logInResponse.data['token']);
           emit(state.copyWith(status: FormzStatus.submissionSuccess));
         }
       } catch (err) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
+      }
+    }
+  }
+
+  Future<void> _onTryAutoLogin(
+      TryAutoLogin event, Emitter<LoginState> emit) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    var username = prefs.getString('username');
+    var password = prefs.getString('password');
+
+    if (username != null && password != null) {
+      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+      LogInResponse? logInResponse = await _authenticationRepository.logIn(
+        username: username,
+        password: password,
+      );
+
+      if (logInResponse != null) {
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      } else {
+        emit(state.copyWith(
+            status: FormzStatus.submissionFailure,
+            message: "Auto login failed"));
       }
     }
   }

@@ -18,13 +18,15 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     var locale = AppLocalizations.of(context)!;
+    context.read<LoginBloc>().add(TryAutoLogin());
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
+              SnackBar(
+                  content: Text(state.message ?? "Authentication failure")),
             );
         }
       },
@@ -80,7 +82,9 @@ class _LoginFormState extends State<LoginForm> {
                       ))
                 ],
               ),
-              _LoginButton(),
+              LoginButton(
+                rememberMe: _rememberMe,
+              ),
             ],
           ),
         ),
@@ -146,7 +150,9 @@ class _PasswordInput extends StatelessWidget {
   }
 }
 
-class _LoginButton extends StatelessWidget {
+class LoginButton extends StatelessWidget {
+  bool rememberMe;
+  LoginButton({required this.rememberMe});
   @override
   Widget build(BuildContext context) {
     var locale = AppLocalizations.of(context)!;
@@ -162,7 +168,9 @@ class _LoginButton extends StatelessWidget {
                 key: const Key('loginForm_continue_raisedButton'),
                 onPressed: state.status.isValidated
                     ? () {
-                        context.read<LoginBloc>().add(const LoginSubmitted());
+                        context
+                            .read<LoginBloc>()
+                            .add(LoginSubmitted(rememberMe: rememberMe));
                       }
                     : null,
                 child: Text(locale.login),

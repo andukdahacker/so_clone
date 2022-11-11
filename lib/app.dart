@@ -1,12 +1,10 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:so/authentication/authentication.dart';
 import 'package:so/dashboard/view/view.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'authentication/bloc/authentication_bloc.dart';
-import 'authentication/bloc/authentication_state.dart';
 
 import 'language/language.dart';
 import 'login/view/view.dart';
@@ -97,6 +95,7 @@ class _AppViewState extends State<AppView> {
             ),
           ),
           builder: (context, child) {
+            // context.read<AuthenticationBloc>().add(AuthenticationFirstLoaded());
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, state) {
                 switch (state.status) {

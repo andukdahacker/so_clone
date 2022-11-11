@@ -24,7 +24,7 @@ class UserRepository {
 
       if (response.statusCode == 200) {
         var user = User.fromJson(response.data['data']['user']);
-        print(user);
+
         return user;
       } else {
         return null;

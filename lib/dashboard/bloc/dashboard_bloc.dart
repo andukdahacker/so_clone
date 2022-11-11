@@ -19,7 +19,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
-      print(token);
       if (token == null) {
         emit(state.copyWith(DashboardStatus.failure));
       } else {
