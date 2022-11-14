@@ -8,13 +8,6 @@ class LanguageEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LanguageFirstLoaded extends LanguageEvent {
-  const LanguageFirstLoaded();
-
-  @override
-  List<Object?> get props => [];
-}
-
 class LanguageChanged extends LanguageEvent {
   const LanguageChanged({required this.locale});
   final Locale locale;

@@ -11,14 +11,15 @@ import 'login/view/view.dart';
 import 'splash/splash.dart';
 
 class App extends StatelessWidget {
-  const App({
-    super.key,
-    required this.authenticationRepository,
-    required this.userRepository,
-  });
+  const App(
+      {super.key,
+      required this.authenticationRepository,
+      required this.userRepository,
+      required this.locale});
 
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
+  final Locale locale;
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +27,15 @@ class App extends StatelessWidget {
       value: authenticationRepository,
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
+          BlocProvider<AuthenticationBloc>(
             create: (_) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
               userRepository: userRepository,
             ),
           ),
-          BlocProvider(
-            create: (context) => LanguageBloc(),
+          BlocProvider<LanguageBloc>(
+            create: (context) =>
+                LanguageBloc()..add(LanguageChanged(locale: locale)),
           ),
         ],
         child: const AppView(),
@@ -58,7 +60,6 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     return BlocBuilder<LanguageBloc, LanguageState>(
       builder: (context, state) {
-        context.read<LanguageBloc>().add(const LanguageFirstLoaded());
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
