@@ -92,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
             create: (context) {
               return LoginBloc(
                   authenticationRepository:
-                      RepositoryProvider.of<AuthenticationRepository>(context));
+                      RepositoryProvider.of<AuthenticationRepository>(context))
+                ..add(TryAutoLogin());
             },
             child: Container(
                 alignment: Alignment.topCenter,

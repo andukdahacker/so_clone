@@ -96,7 +96,6 @@ class _AppViewState extends State<AppView> {
             ),
           ),
           builder: (context, child) {
-            // context.read<AuthenticationBloc>().add(AuthenticationFirstLoaded());
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, state) {
                 switch (state.status) {

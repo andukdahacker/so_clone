@@ -18,7 +18,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     var locale = AppLocalizations.of(context)!;
-    context.read<LoginBloc>().add(TryAutoLogin());
+
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
