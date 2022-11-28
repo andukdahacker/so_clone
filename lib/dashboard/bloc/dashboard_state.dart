@@ -1,18 +1,36 @@
-import 'package:dashboard_repository/dashboard_repository.dart';
 import 'package:equatable/equatable.dart';
 
-enum DashboardStatus { initial, loading, success, failure }
+import '../repository/models/models.dart';
 
 class DashboardState extends Equatable {
-  final Dashboard? dashboard;
-  final DashboardStatus status;
+  @override
+  List<Object?> get props => [];
+}
 
-  const DashboardState({this.dashboard, this.status = DashboardStatus.initial});
+class DashboardInitial extends DashboardState {
+  @override
+  List<Object?> get props => [];
+}
 
-  DashboardState copyWith(DashboardStatus status, [Dashboard? dashboard]) {
-    return DashboardState(status: status, dashboard: dashboard);
+class DashboardLoading extends DashboardState {
+  @override
+  List<Object?> get props => [];
+}
+
+class DashboardSuccess extends DashboardState {
+  final Dashboard dashboard;
+
+  DashboardSuccess({required this.dashboard});
+
+  DashboardSuccess copyWith(Dashboard dashboard) {
+    return DashboardSuccess(dashboard: dashboard);
   }
 
   @override
-  List<Object?> get props => [dashboard, status];
+  List<Object?> get props => [dashboard];
+}
+
+class DashboardError extends DashboardState {
+  @override
+  List<Object?> get props => [];
 }

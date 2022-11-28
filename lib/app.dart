@@ -1,41 +1,49 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:so/authentication/authentication.dart';
+import 'package:so/authentication/repository/authentication_repository.dart';
 import 'package:so/dashboard/view/view.dart';
-import 'package:user_repository/user_repository.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:so/language/repository/language_repository.dart';
 
 import 'language/language.dart';
 import 'login/view/view.dart';
 import 'splash/splash.dart';
 
 class App extends StatelessWidget {
-  const App(
+  App(
       {super.key,
+      required this.locale,
       required this.authenticationRepository,
-      required this.userRepository,
-      required this.locale});
+      required this.languageRepository});
 
-  final AuthenticationRepository authenticationRepository;
-  final UserRepository userRepository;
   final Locale locale;
+  final AuthenticationRepository authenticationRepository;
+  final LanguageRepository languageRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: authenticationRepository,
+        ),
+        RepositoryProvider.value(
+          value: languageRepository,
+        ),
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthenticationBloc>(
             create: (_) => AuthenticationBloc(
               authenticationRepository: authenticationRepository,
-              userRepository: userRepository,
             ),
           ),
           BlocProvider<LanguageBloc>(
             create: (context) =>
-                LanguageBloc()..add(LanguageChanged(locale: locale)),
+                LanguageBloc(languageRepository: languageRepository)
+                  ..add(LanguageChanged(locale: locale)),
           ),
         ],
         child: const AppView(),

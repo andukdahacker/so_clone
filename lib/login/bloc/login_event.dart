@@ -29,6 +29,9 @@ class LoginSubmitted extends LoginEvent {
   const LoginSubmitted({this.rememberMe = false});
 
   final bool rememberMe;
+
+  @override
+  List<Object> get props => [rememberMe];
 }
 
 class TryAutoLogin extends LoginEvent {}

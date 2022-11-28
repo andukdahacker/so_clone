@@ -1,20 +1,22 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:user_repository/user_repository.dart';
+import 'package:so/authentication/repository/authentication_repository.dart';
+import 'package:so/language/repository/language_repository.dart';
 
 import 'app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  var locale = prefs.getString('locale');
+  final AuthenticationRepository authenticationRepository =
+      AuthenticationRepository();
+  final LanguageRepository languageRepository = LanguageRepository();
+
+  var locale = await languageRepository.getLanguagePrefs();
   runApp(App(
-    authenticationRepository: AuthenticationRepository(),
-    userRepository: UserRepository(),
+    authenticationRepository: authenticationRepository,
+    languageRepository: languageRepository,
     locale: locale == null
         ? const Locale('en')
-        : locale == "en"
+        : locale == const Locale('en')
             ? const Locale('en')
             : const Locale('vi'),
   ));

@@ -1,9 +1,9 @@
-import 'package:dashboard_repository/dashboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../language/bloc/language_bloc.dart';
 import '../../language/bloc/language_state.dart';
+import '../repository/models/models.dart';
 
 class ModulesCard extends StatelessWidget {
   const ModulesCard({super.key, required this.modules});

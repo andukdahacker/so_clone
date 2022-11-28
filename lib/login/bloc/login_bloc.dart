@@ -1,8 +1,8 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../authentication/repository/authentication_repository.dart';
+import '../../authentication/repository/models/models.dart';
 import '../models/models.dart';
 import 'login_event.dart';
 import 'login_state.dart';
@@ -53,25 +53,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       try {
-        final prefs = await SharedPreferences.getInstance();
         LogInResponse? logInResponse = await _authenticationRepository.logIn(
-          username: state.username.value,
-          password: state.password.value,
-        );
+            username: state.username.value,
+            password: state.password.value,
+            rememberMe: event.rememberMe);
 
-        if (logInResponse == null) {
-          emit(state.copyWith(status: FormzStatus.submissionFailure));
-        } else if (logInResponse.status == 0) {
-          emit(state.copyWith(
-              status: FormzStatus.submissionFailure,
-              message: logInResponse.message));
-        } else {
-          if (event.rememberMe) {
-            await prefs.setString('username', state.username.value);
-            await prefs.setString('password', state.password.value);
-          }
-          await prefs.setString('token', logInResponse.data['token']);
+        if (logInResponse != null) {
           emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        } else {
+          emit(state.copyWith(status: FormzStatus.submissionFailure));
         }
       } catch (err) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
@@ -81,17 +71,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _onTryAutoLogin(
       TryAutoLogin event, Emitter<LoginState> emit) async {
-    final prefs = await SharedPreferences.getInstance();
+    var result = await _authenticationRepository.getUserInfoPrefs();
 
-    var username = prefs.getString('username');
-    var password = prefs.getString('password');
-
-    if (username != null && password != null) {
+    if (result != null) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       LogInResponse? logInResponse = await _authenticationRepository.logIn(
-        username: username,
-        password: password,
-      );
+          username: result['username']!,
+          password: result['password']!,
+          rememberMe: true);
 
       if (logInResponse != null) {
         emit(state.copyWith(status: FormzStatus.submissionSuccess));

@@ -1,29 +1,25 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:user_repository/user_repository.dart';
 
+import '../repository/authentication_repository.dart';
+import '../repository/models/user.dart';
 import 'authentication_event.dart';
 import 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository _authenticationRepository;
-  final UserRepository _userRepository;
+
   late StreamSubscription<AuthenticationStatus>
       _authenticationStatusSubscription;
 
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
-    required UserRepository userRepository,
   })  : _authenticationRepository = authenticationRepository,
-        _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
-    on<AuthenticationFirstLoaded>(_onAuthenticationFirstLoaded);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => add(AuthenticationStatusChanged(status)),
     );
@@ -34,23 +30,6 @@ class AuthenticationBloc
     _authenticationStatusSubscription.cancel();
     _authenticationRepository.dispose();
     return super.close();
-  }
-
-  Future<void> _onAuthenticationFirstLoaded(AuthenticationFirstLoaded event,
-      Emitter<AuthenticationState> emit) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    var id = prefs.getInt('id');
-    var fullname = prefs.getString('fullname');
-    var avatar = prefs.getString('avatar');
-
-    if (id != null && fullname != null && avatar != null) {
-      User user = User(id: id, fullname: fullname, avatar: avatar);
-      _authenticationStatusSubscription.pause();
-      return emit(AuthenticationState.authenticated(user));
-    } else {
-      return emit(const AuthenticationState.unauthenticated());
-    }
   }
 
   Future<void> _onAuthenticationStatusChanged(
@@ -77,16 +56,12 @@ class AuthenticationBloc
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('username');
-    await prefs.remove('password');
-
     _authenticationRepository.logOut();
   }
 
   Future<User?> _tryGetUser() async {
     try {
-      final user = await _userRepository.getUser();
+      final user = await _authenticationRepository.getUser();
       return user;
     } catch (_) {
       return null;

@@ -1,12 +1,11 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:so/language/bloc/language_bloc.dart';
 import 'package:so/language/bloc/language_event.dart';
 import 'package:so/language/bloc/language_state.dart';
-import 'package:so/widgets/customSwich.dart';
-import 'package:so/widgets/customeAppBar.dart';
+import 'package:so/widgets/custom_switch_widget.dart';
+import 'package:so/widgets/custom_app_bar_widget.dart';
+import '../../authentication/repository/authentication_repository.dart';
 import '../login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -65,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                     BlocBuilder<LanguageBloc, LanguageState>(
                       builder: (context, state) {
                         return CustomSwitch(
+                          key: const Key("LanguageSwitch"),
                           value: languageVI,
                           onChanged: (val) {
                             setState(() {
@@ -92,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
             create: (context) {
               return LoginBloc(
                   authenticationRepository:
-                      RepositoryProvider.of<AuthenticationRepository>(context))
-                ..add(TryAutoLogin());
+                      RepositoryProvider.of<AuthenticationRepository>(context));
+              // ..add(TryAutoLogin());
             },
             child: Container(
                 alignment: Alignment.topCenter,

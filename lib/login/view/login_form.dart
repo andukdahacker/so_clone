@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../widgets/customTextInput.dart';
+import '../../widgets/custom_text_input_widget.dart';
 import '../login.dart';
 
 class LoginForm extends StatefulWidget {

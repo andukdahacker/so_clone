@@ -1,12 +1,13 @@
-import 'package:dashboard_repository/dashboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:so/dashboard/bloc/dashboard_event.dart';
 import 'package:so/dashboard/view/account_page.dart';
 import 'package:so/dashboard/view/home_page.dart';
-import 'package:so/widgets/customeAppBar.dart';
+import 'package:so/widgets/custom_app_bar_widget.dart';
 import '../bloc/dashboard_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../repository/dashboard_repository.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});

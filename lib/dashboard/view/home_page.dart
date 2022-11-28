@@ -1,12 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:so/dashboard/view/TrianglePainter.dart';
 import 'package:so/dashboard/view/calendar.dart';
 import 'package:so/dashboard/view/periods.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import '../../authentication/authentication.dart';
 import '../bloc/dashboard_bloc.dart';
@@ -26,9 +24,9 @@ class HomePage extends StatelessWidget {
         children: [
           buildDashboardHeader(context),
           BlocBuilder<DashboardBloc, DashboardState>(builder: (context, state) {
-            if (state.status == DashboardStatus.success) {
+            if (state is DashboardSuccess) {
               var schoolYearStartDate = DateTime.fromMillisecondsSinceEpoch(
-                  state.dashboard!.school_year_start_date * 1000);
+                  state.dashboard.school_year_start_date * 1000);
               return Column(
                 children: [
                   Padding(
@@ -51,7 +49,7 @@ class HomePage extends StatelessWidget {
                   ),
                   HomeCalendar(school_year_start_date: schoolYearStartDate),
                   CarouselSlider(
-                    items: state.dashboard!.period.map((e) {
+                    items: state.dashboard.period.map((e) {
                       return PeriodCard(period: e);
                     }).toList(),
                     options: CarouselOptions(
@@ -75,7 +73,7 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      ModulesCard(modules: state.dashboard!.modules),
+                      ModulesCard(modules: state.dashboard.modules),
                     ],
                   ),
                   Column(
@@ -86,13 +84,13 @@ class HomePage extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 10, bottom: 10),
                         child: Text(locale.generalModules),
                       ),
-                      ModulesCard(modules: state.dashboard!.general_modules),
+                      ModulesCard(modules: state.dashboard.general_modules),
                     ],
                   )
                 ],
               );
             }
-            if (state.status == DashboardStatus.failure) {
+            if (state is DashboardError) {
               return const Text("error");
             }
             return const CircularProgressIndicator(
